@@ -112,22 +112,22 @@ define(function () {
             });
         });
         pubSub.subscribe('legendView', function (args) {
-            var url = args.url;
-            if (window.legendView != null) {
-                window.legendView.url = url;
-                return false;
-            }
-            require(['vue', 'vLegendView'], function (Vue) {
-                domConstruct.create('div').id('legendView').addToBody();
-                window.legendView = new Vue({
-                    el: '#legendView',
-                    data: {
-                        url: url,
-                        visible: false
-                    },
-                    template: '<v-legendview class="my-left-bottom"  :url="url"></v-quicksearchview>'
-                });
-            });
+            //var url = args.url;
+            //if (window.legendView != null) {
+            //    window.legendView.url = url;
+            //    return false;
+            //}
+            //require(['vue', 'vLegendView'], function (Vue) {
+            //    domConstruct.create('div').id('legendView').addToBody();
+            //    window.legendView = new Vue({
+            //        el: '#legendView',
+            //        data: {
+            //            url: url,
+            //            visible: false
+            //        },
+            //        template: '<v-legendview class="my-left-bottom"  :url="url"></v-quicksearchview>'
+            //    });
+            //});
         });
         pubSub.subscribe('quickSearchView', function (args) {
             var map = args.map;
@@ -175,6 +175,39 @@ define(function () {
             else {
                 window.resultView.allList = res;
                 if (window.resultView.visible == false)window.resultView.visible = true;
+            }
+        });
+        pubSub.subscribe('rightPanelView', function (args) {
+            var map = args.map,
+                e = args.e,
+                layer = args.layer || {};
+            var x = (e.clientX - 14) + 'px', y = (e.clientY + 4) + 'px';
+            if (!window.rightPanelView) {
+                domConstruct.create('div').id('rightPanelView').addToBody();
+                require(['vue', 'vRightPanelView'], function (Vue) {
+                    window.rightPanelView = new Vue({
+                        el: '#rightPanelView',
+                        data: {
+                            map: map,
+                            layer: layer,
+                            x: x,
+                            y: y,
+                            visible: true
+                        },
+                        template: '<v-rightpanelview  v-show="visible" @close="close" :map="map" :layer="layer" :x="x" :y="y"></v-rightpanelview>',
+                        methods: {
+                            close: function () {
+                                this.visible = false;
+                            }
+                        }
+                    });
+                });
+            }
+            else {
+                window.rightPanelView.layer = layer;
+                window.rightPanelView.x = x;
+                window.rightPanelView.y = y;
+                window.rightPanelView.visible = true;
             }
         });
         return this;

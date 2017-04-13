@@ -18,7 +18,7 @@ require(['vue'], function (Vue) {
         },
         template: "<li ><div @click='toggle' v-if='isFolder'>" +
         "<span class='layerIcon l-unExpand' :class='{active:expand}'></span><span class='layerIcon l-group'></span><span>{{tree.name}}</span></div>" +
-        "<div @contextmenu.prevent='showMenus(tree)' v-else>" +
+        "<div @contextmenu.prevent='showMenus($event,tree)' v-else>" +
         "<span class='layerIcon l-unCheck' :class='{active:check}' @click='checkToggle(tree)'></span><span class='layerIcon l-layer' :class='{active:tree.imgSrc}'></span><span>{{tree.name}}</span></div>" +
         "<ul v-show='open' v-if='isFolder'>" +
         "<tree-item v-for='t in tree.children' :key='t.id' :map='map' :tree='t'></tree-item>" +
@@ -48,12 +48,14 @@ require(['vue'], function (Vue) {
                     list.push(tree.id);
                     if (tree.imgSrc)
                         iList.push(tree.id);
-                    pubSub.publish("legendView", {url: tree.legendSrc})
+                    pubSub.publish('legendView', {url: tree.legendSrc})
                 }
                 this.check = !this.check;
             },
-            showMenus: function (tree) {
-                console.log(tree);
+            showMenus: function (e, tree) {
+                if (this.check) {
+                    pubSub.publish('rightPanelView', {map: this.map, e: e, layer: tree})
+                }
             }
         }
     });

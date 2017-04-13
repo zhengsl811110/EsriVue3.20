@@ -11,8 +11,8 @@ window.onload= function () {
         gRegisterPub.initWidgets().initMapApi().initJsApi();
         //初始化登入查询
         Server.getAjax({
-            url: 'http://192.168.42.75/jsDataCenter/m.ashx?x=login&appid=qzcyy',
-            data: {xUserName: 'zhengsl', xPassword: '123@abcd'}
+            url: 'http://192.168.84.23/jsDataCenter/m.ashx?x=login&appid=szsghj',
+            data: {xUserName: 'zhengsl', xPassword: '123'}
         }).done(function (res) {
             window.OneMap.modules = res.data.modules;
             window.OneMap.services = res.data.services;

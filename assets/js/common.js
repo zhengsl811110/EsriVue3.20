@@ -70,6 +70,11 @@ window.dojoConfig = {
             main: "vCmpMapView"
         },
         {
+            name: "vRightPanelView",
+            location: getRelUrl() + "/assets/components",
+            main: "vRightPanelView"
+        },
+        {
             name: "gTokenM",
             location: getRelUrl() + "/assets/api",
             main: "gTokenM"

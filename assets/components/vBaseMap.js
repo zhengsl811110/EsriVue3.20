@@ -13,7 +13,7 @@ require(['vue'], function (Vue) {
                 layerViewVisible: ''
             }
         },
-        template: '<div class="esri-widget v-baseMap"><ul><li v-for="baseMap in baseMapList" :class="{active:baseMap.id==defaultVisibleId,layerActive:baseMap.name==layerViewVisible}" @click="changeBaseMap(baseMap)"><a><span class="icon" :class="baseMap.name"></span>{{baseMap.label}}</a></li></ul></div>',
+        template: '<div class="esri-widget v-baseMap"><ul><li v-for="baseMap in baseMapList" :class="{active:baseMap.id==defaultVisibleId,layerActive:baseMap.name==layerViewVisible}" @click="changeBaseMap(baseMap)"  @contextmenu.prevent="showMenus($event,baseMap)"><a><span class="icon" :class="baseMap.name"></span>{{baseMap.label}}</a></li></ul></div>',
         mounted: function () {
             var _this = this;
             this.baseMapList.forEach(function (baseMap) {
@@ -26,6 +26,11 @@ require(['vue'], function (Vue) {
             });
         },
         methods: {
+            showMenus: function (e, baseMap) {
+                if (this.defaultVisibleId == baseMap.id) {
+                    pubSub.publish('rightPanelView', {map: this.map, e: e, layer: baseMap})
+                }
+            },
             changeBaseMap: function (baseMap) {
                 if (baseMap.name === 'layerView') {
                     //图层面板控制
@@ -50,7 +55,7 @@ require(['vue'], function (Vue) {
                         }
                     }
                 });
-                pubSub.publish('baseMapLayerM', {map: this.map, layer: baseMap});
+                pubSub.publish('layerM.baseMapLayerM', {map: this.map, layer: baseMap});
             }
         }
     });
