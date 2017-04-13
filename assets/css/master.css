@@ -1,0 +1,490 @@
+*{
+    font-family: "Microsoft YaHei UI";
+}
+html, body, .map {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-image: url("../imgs/mapbg.gif");
+    font-size: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: hidden;
+}
+ul,li {
+    padding:0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+}
+/**UI 样式**/
+.esri-widget {
+    position: absolute;
+    z-index: 1;
+    box-sizing: border-box;
+    color: #323232;
+    font-size: 14px;
+    font-family: "Avenir Next W00", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.3em;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    align-items: flex-end;
+    flex-flow: column nowrap;
+
+}
+.my-top-right {
+    top: 15px;
+    right: 15px;
+}
+.my-top-left {
+    top: 15px;
+    left: 15px;
+}
+.my-left-bottom {
+    left: 15px;
+    bottom: 30px;
+}
+.my-right-bottom {
+    right: 15px;
+    bottom: 30px;
+}
+
+.v-baseMap{
+    z-index: 2;
+    background: transparent;
+    box-shadow:none !important;
+}
+.v-baseMap li{
+    float: left;
+    padding: 0 10px 0 3px;
+    height: 30px;
+    margin-left: 10px;
+    line-height: 30px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+.v-baseMap li.active{
+    background: #0593d3;
+}
+.v-baseMap li.active>a {
+    color: #fff;
+}
+.v-baseMap span{
+    /*margin-right: 5px;*/
+    font-size: 12px;
+    font-weight: bold;
+}
+.v-baseMap li.layerActive {
+    height: 35px;
+    box-shadow: -4px 0 4px -4px rgba(0, 0, 0, 0.3), /*左边阴影*/ 0 -4px 4px -4px rgba(0, 0, 0, 0.3), /*顶部阴影*/ 0 0 0 white, /*底部阴影*/ 4px 0 4px -4px rgba(0, 0, 0, 0.3); /*右边阴影*/
+}
+
+.v-toolsBar{
+    width: 30px;
+    background: transparent;
+    opacity: 0.8;
+}
+.v-toolsBar:hover {
+    opacity: 1;
+}
+.v-toolsBar >ul {
+    float: left;
+    margin-top: 4px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.v-toolsBar span{
+    background-color: #ffffff !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.v-layerManager {
+    padding: 0 0 10px 5px;
+    width: 230px;
+    max-height: -moz-calc(100% - 70px);
+    max-height: -webkit-calc(100% - 70px);
+    max-height: calc(100% - 70px);
+    margin-top: 35px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.v-layerManager>header {
+    padding: 0 4px;
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid #d2d2d2;
+}
+.v-layerManager>header>span{
+    float: right;
+}
+.v-layerManager>section {
+    padding: 10px 0 0;
+    overflow-y: auto;
+}
+.v-layerManager>section ul {
+    padding-left: 1em;
+    line-height: 1.5em;
+    list-style-type: dot;
+}
+.v-layerManager ul div{
+
+    height: 25px;
+    line-height: 25px;
+    font-size: 13px;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.v-layerManager ul div>span {
+    /*margin-right: 5px;*/
+}
+
+.v-resultView {
+    left: 55px;
+    width: 360px;
+    max-height: -moz-calc(100% - 55px);
+    max-height: -webkit-calc(100% - 55px);
+    max-height: calc(100% - 55px);
+    z-index: 99;
+}
+.v-resultView.underQuickSearch {
+    top: 50px;;
+}
+.v-resultView>.header{
+    padding: 4px 0 0;
+    height: 30px;
+    border-bottom: 1px solid #d2d2d2;
+}
+.v-resultView>.header>span.close{
+    float: right;
+}
+.v-resultView>.header .list-count {
+    color: #0593d3;
+    font-size: 16px;
+}
+
+.v-resultView>.header li {
+    padding: 7px 10px 5px;
+    width: 90px;
+    margin-left: 20px;
+    border: 1px solid #d2d2d2;
+    border-bottom: 0;
+    background: white;
+    text-align: center;
+}
+.v-resultView>footer {
+    padding: 4px 0 0;
+    height: 40px;
+    text-align: center;
+    background: white;
+}
+.v-quickSearchView{
+    left: 55px;
+}
+.v-quickSearchView>select{
+    position: relative;
+    padding: 5px 0 5px 5px;
+    width: 100px;
+    border: 1px solid #0593d3;
+    margin-right: -5px;
+    outline: medium;
+}
+.v-quickSearchView>input {
+    padding: 6px;
+    width: 249px;
+    color: #999999;
+    border: 1px solid #0593d3;
+    outline: medium;
+}
+.v-quickSearchView>button {
+    padding: 6px 13px 6px;
+    padding: 6px 13px 6px \0;
+    border: 1px solid #0593d3;
+    background: #0593d3;
+    color: white;
+    outline: medium;
+    cursor: pointer;
+}
+.v-popup-content {
+    min-height: 100px;
+    max-height: 260px;
+    background-color: #F7F7F7;
+    overflow-y: auto;
+}
+.v-popup-footer {
+    padding: 0 10px;
+    height: 20px;
+    margin-top: 5px;
+    line-height: 20px;
+    text-align: right;
+    border-top: 1px solid #d3d3d3;
+}
+.v-popup-footer>.link{
+    color: #369;
+    text-decoration: none!important;
+    cursor: pointer;
+}
+.list-group {
+    position: relative;
+    display: block;
+    padding: 4px;
+    cursor: pointer;
+    overflow-y: auto;
+}
+.list-group-item {
+    position: relative;
+    padding: 10px 15px;
+    display: block;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 0;
+    color: #3d3d3d;
+    font-size: 12px;
+    cursor: pointer;
+}
+.list-group-item:hover{
+    background-color: #f8f8f8;
+}
+.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+.row>.list-header {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.row>.list-header>.title{
+    line-height: 33px;
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3d3d3d;
+}
+.col-xs-4{float: left;width:33.33333333%;padding: 0;text-align: right}
+.col-xs-8{float:left;width:66.66666667%;padding: 0;}
+.clearfix:after,.clearfix:before,.row:after,.row:before{content:" ";display:table}
+.clearfix:after,.row:after{clear:both}
+/**Esri 样式修正**/
+.esriPopup .titlePane {
+    padding: 4px 0 4px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background-color: #434343;
+}
+.esriPopup .titlePane .title{
+    padding-right:20px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+.esriPopup .titleButton.close{
+    top:8px;
+    right: 10px;
+    opacity:1
+}
+.esriPopup .contentPane{
+    padding: 0;
+    line-height: 20px;
+    font-size: 12px;
+}
+.esriPopup .sizer{
+    width: 310px !important;
+}
+.esriPopup .titleButton.maximize{visibility:hidden}
+    /**span.icon**/
+span.icon {
+    float: left;
+    height: 30px;
+    width: 30px;
+    background: url("../imgs/icon.png") no-repeat left;
+    cursor: pointer;
+}
+/**baseMap**/
+.icon.baseLayer{
+    background-position: 0 0;
+}
+.active .icon.baseLayer {
+    background-position: 0 -30px;
+}
+.icon.baseLayerImg{
+    background-position: -30px 0;
+}
+.active .icon.baseLayerImg {
+    background-position: -30px -30px;
+}
+.icon.layerView{
+    background-position: -60px 0;
+}
+.active .icon.layerView {
+    background-position: -60px -30px;
+}
+.icon.layerView{
+    background-position: -60px 0;
+}
+.icon.layerClose{
+    background-position: 0 -60px;
+}
+.icon.layerClose:hover{
+    background-position: 0 -90px;
+}
+/**toolsBar**/
+.icon.expand {
+    background-position: 0 -120px;
+}
+.icon.expand:hover {
+    background-position: 0 -150px;
+}
+.icon.expand.active {
+    background-position: -30px -120px;
+}
+.icon.expand.active:hover {
+    background-position: -30px -150px;
+}
+.icon.mapScreen{
+    background-position: -60px -120px;
+}
+.icon.mapScreen:hover{
+    background-position: -60px -150px;
+}
+.icon.fullScreen{
+    background-position: -90px -120px;
+}
+.icon.fullScreen.active{
+    background-position: -90px -150px;
+}
+.icon.fullScreen:hover{
+    background-position: -90px -150px;
+}
+.icon.zoomIn{
+    background-position: -120px -120px;
+}
+.icon.zoomIn:hover{
+    background-position: -120px -150px;
+}
+.icon.zoomOut{
+    background-position: -150px -120px;
+}
+.icon.zoomOut:hover{
+    background-position: -150px -150px;
+}
+.icon.measureLength{
+    background-position: -180px -120px;
+}
+.icon.measureLength:hover{
+    background-position: -180px -150px;
+}
+.icon.measureArea{
+    background-position: -210px -120px;
+}
+.icon.measureArea:hover{
+    background-position: -210px -150px;
+}
+.icon.iQueryTool{
+    background-position: 0 -180px;
+}
+.icon.iQueryTool.active{
+    background-position: 0 -210px;
+}
+.icon.iQueryTool:hover{
+    background-position: 0 -210px;
+}
+.icon.clear{
+    background-position: -90px -180px;
+}
+.icon.clear:hover{
+    background-position: -90px -210px;
+}
+.icon.tree-expand{
+    background-position: -90px -180px;
+}
+.icon.tree-expand.active {
+    background-position: -90px -210px;
+}
+.icon.close{
+    background-position: -120px -240px;
+}
+.icon.close:hover{
+    background-position: -120px -300px;
+}
+.icon.swipeMap{
+    background-position: -30px -180px;
+}
+.icon.swipeMap:hover{
+    background-position: -30px -210px;
+}
+.icon.cmpMap{
+    background-position: -60px -180px;
+}
+.icon.cmpMap:hover{
+    background-position: -60px -210px;
+}
+
+span.loading {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    float: left;
+    right: 54px;
+    background: url(../imgs/loading.svg) no-repeat left;
+    background-position: 5px 5px;
+}
+
+
+/**span.layerIcon**/
+span.layerIcon {
+    background: url("../imgs/layerIcon.png") no-repeat left;
+    float: left;
+    height: 20px;
+    width: 20px;
+}
+.layerIcon.l-group {
+    background-position: 0 0;
+    margin-right: 2px;
+}
+.layerIcon.l-layer {
+    background-position: -20px 0;
+    margin-right: 2px;
+}
+.layerIcon.l-layer.active {
+    background-position: -40px 0;
+}
+.layerIcon.l-unExpand {
+    background-position: -80px 0;
+}
+.layerIcon.l-unExpand.active {
+    background-position: -60px 0;
+}
+.layerIcon.l-unCheck {
+    background-position: -100px 0;
+}
+.layerIcon.l-unCheck.active {
+    background-position: -120px 0;
+}
+/**icon marker**/
+span.marker-Icon{background:url("../imgs/poi/icon-poi.png") no-repeat left;float: left;width: 30px;height: 30px;}
+span.marker-Icon.marker1{background-position: 0 0;}
+span.marker-Icon.marker2{background-position: -30px 0;}
+span.marker-Icon.marker3{background-position: -60px 0;}
+span.marker-Icon.marker4{background-position: -90px 0;}
+span.marker-Icon.marker5{background-position: -120px 0;}
+span.marker-Icon.marker6{background-position: -150px 0;}
+span.marker-Icon.marker7{background-position: -180px 0;}
+span.marker-Icon.marker8{background-position: -210px 0;}
+span.marker-Icon.marker9{background-position: -240px 0;}
+span.marker-Icon.marker10{background-position:-270px 0;}
+/**chrome scroll**/
+::-webkit-scrollbar{width:4px;height:8px}
+::-webkit-scrollbar-button:vertical{display:none}
+::-webkit-scrollbar-track:vertical{background-color:#000}
+::-webkit-scrollbar-track-piece{background-color:#F5F5F5}
+::-webkit-scrollbar-thumb:vertical{margin-right:10px;background-color:#999}
+::-webkit-scrollbar-thumb:vertical:hover{background-color:#666}
+::-webkit-scrollbar-corner:vertical{background-color:#535353}
+::-webkit-scrollbar-resizer:vertical{background-color:#FF6E00}
