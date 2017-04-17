@@ -135,7 +135,7 @@ function getRelUrl() {
     } else {
         relUrl = url;
     }
-    var pos = relUrl.lastIndexOf('pages/');
+    var pos = relUrl.lastIndexOf('mapw/');
     relUrl = relUrl.substr(0, pos);
     return relUrl.replace();
 }

@@ -48,7 +48,7 @@ define(function () {
             require(['esri/symbols/PictureMarkerSymbol', 'dojo/domReady!'],
                 function (PictureMarkerSymbol) {
                     var symbol = new PictureMarkerSymbol({
-                        url: 'assets/imgs/poi/' + opt.name + '.png',
+                        url: '../assets/imgs/poi/' + opt.name + '.png',
                         width: w,
                         height: h,
                         xoffset: x,

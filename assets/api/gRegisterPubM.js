@@ -42,6 +42,55 @@ define(function () {
                 });
             });
         });
+        pubSub.subscribe('mapView3D', function () {
+            require(['vue', 'server', 'gTokenM', 'vMapView'], function (Vue, Server, gTokenM) {
+                //add mapW node
+                domConstruct.create('div').id('mapW').addToBody();
+                //render map node
+                Server.getAjax({url: window.OneMap.modules.findByName('mapView3D').serviceUrl}).done(function (res) {
+                    gTokenM.setTokens(res.data.token);
+                    new Vue({
+                        el: '#mapW',
+                        data: {
+                            id: 'map',
+                            spatialReference: res.data.spatialReference,
+                            baseMap: res.data.baseMap,
+                            extent: res.data.defaultMapExtent
+                        },
+                        template: '<v-mapview :id="id" :spatialReference="spatialReference"  :extent="extent" @initComplete="initComplete"></v-mapview>',
+                        methods: {
+                            initComplete: function (map) {
+                                pubSub.publish('baseMapBarsView', {map: map, config: this.baseMap});
+
+                                //window.OneMap.modules.forEach(function (m) {
+                                //    pubSub.publish(m.name + 'View', {map: map});
+                                //});
+                                pubSub.publish('toolsBarView', {map: map});
+                                pubSub.publish('quickSearchView', {map: map});
+                                map.on('load', function () {
+                                    //window.OneMap.modules.forEach(function (m) {
+                                    //    pubSub.publish(m.name + 'View', {map: map});
+                                    //});
+                                    //pubSub.publish('toolsBarView', {map: map});
+                                    //pubSub.publish('quickSearchView', {map: map});
+                                    pubSub.publish('map.onLoad', {map: map});
+                                });
+                            }
+                        }
+                    });
+                });
+            });
+        });
+        pubSub.subscribe('swipeMapView', function () {
+            require(['vSwipeMapView'], function (vSwipeMapView) {
+                vSwipeMapView.init();
+            });
+        });
+        pubSub.subscribe('cmpMapView', function () {
+            require(['vCmpMapView'], function (vCmpMapView) {
+                vCmpMapView.init();
+            });
+        });
         pubSub.subscribe('baseMapBarsView', function (args) {
             var map = args.map, config = args.config || [];
             require(['vue', 'vBaseMap'], function (Vue) {
@@ -375,15 +424,6 @@ define(function () {
                         res: attributes.attr
                     });
                 }
-            });
-            map.graphics.on('mouse-over', function (evt) {
-                var attributes = evt.graphic.attributes;
-                if (attributes.popup == true) {
-                    map.setMapCursor('pointer');
-                }
-            });
-            map.graphics.on('mouse-out', function (evt) {
-                map.setMapCursor('default');
             });
         });
         return this;

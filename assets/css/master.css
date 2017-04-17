@@ -15,6 +15,10 @@ html, body, .map {
     user-select: none;
     overflow: hidden;
 }
+
+#map_graphics_layer > image {
+    cursor: pointer;
+}
 ul,li {
     padding:0;
     margin: 0;
@@ -305,6 +309,70 @@ ul,li {
     margin-bottom: 5px;
     width: 120px;
 }
+
+/*swipeMap*/
+.v-swipeMapView .map-left {
+    float: left;
+}
+
+.v-swipeMapView .map-right {
+    float: right;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+.shade {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 7;
+    overflow: hidden;
+    border-right: 2px solid grey;
+}
+
+.unSelect {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none
+}
+
+.v-cmpMapView .map-left {
+    left: 0;
+    float: left;
+    width: 50%;
+    margin-left: -1px;
+    border-right: 1px solid #2f4050;
+}
+
+.v-cmpMapView .map-right {
+    right: 0;
+    width: 50%;
+}
+
+.swipeCircle {
+    position: absolute;
+    left: -moz-calc(50% - 22px);
+    left: -webkit-calc(50% - 22px);
+    left: calc(50% - 22px);
+    top: -moz-calc(50% - 22px);
+    top: -webkit-calc(50% - 22px);
+    top: calc(50% - 22px);
+    z-index: 100;
+    height: 40px;
+    width: 40px;
+    background: rgba(0, 0, 0, .2);
+    border-radius: 40px;
+    border: 4px solid grey;
+    cursor: pointer
+}
+
+/*swipeMap end*/
 .list-group {
     position: relative;
     display: block;
