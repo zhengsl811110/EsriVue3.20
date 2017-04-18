@@ -74,10 +74,10 @@ define(function () {
             });
         },
         swipeMap: function (map) {
-
+            parent.pubSub.publish('showSecondFrame', {src: 'mapw/map.html?mapType=swipe', label: '图层拉框对比'})
         },
         cmpMap: function (map) {
-
+            parent.pubSub.publish('showSecondFrame', {src: 'mapw/map.html?mapType=cmp', label: '图层双窗口对比'})
         },
         clear: function (map) {
             map.setMapCursor('default');

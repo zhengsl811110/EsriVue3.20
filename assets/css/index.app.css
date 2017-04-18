@@ -1,0 +1,42 @@
+html, body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.second-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 9999999;
+}
+
+.second-container > header {
+    height: 50px;
+    line-height: 50px;
+    font-size: 14px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.second-container > header > .frame-close {
+    float: left;
+    padding: 1px;
+    background-color: #3D3D3D;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.second-container > header > .frame-close > img {
+    float: left;
+}
+
+.second-container > .second-frame {
+    height: -moz-calc(100% - 50px);
+    height: -webkit-calc(100% - 50px);
+    height: calc(100% - 50px);
+}

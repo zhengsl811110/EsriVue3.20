@@ -156,7 +156,6 @@ define(function () {
                         },
                         template: '<v-layermanager v-show="visible" class="my-top-right v-layerView" :map="map" :layerList="layerList"></v-layermanager>'
                     });
-                    //view.ui.add(layerManagerW.$el, "top-right");
                 });
             });
         });

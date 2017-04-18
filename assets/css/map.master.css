@@ -28,7 +28,7 @@ ul,li {
 /**UI 样式**/
 .esri-widget {
     position: absolute;
-    z-index: 1;
+    z-index: 8;
     box-sizing: border-box;
     color: #323232;
     font-size: 14px;
@@ -58,9 +58,20 @@ ul,li {
 }
 
 .v-baseMap{
-    z-index: 2;
+    z-index: 8;
     background: transparent;
     box-shadow:none !important;
+}
+
+.v-baseMap li {
+    float: left;
+    padding: 0 10px 0 3px;
+    height: 30px;
+    margin-left: 10px;
+    line-height: 30px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
 .v-baseMap li{
     float: left;

@@ -8,11 +8,14 @@ requirejs.config({
         jquery: 'js/jquery.min',
         server: 'js/server',
         pace: 'plugins/pace/pace.min',
-        main: "js/index.main"
+        main: "js/index.main",
+        common: 'js/common',
+        vue: 'js/vue',
+        vFrameW: 'components/vFrameW'
     }
 });
 
-requirejs(['jquery', 'main', 'server', 'pace'],
+requirejs(['jquery', 'main', 'server', 'pace', 'common'],
     function ($, Main, Server, Pace) {
         window.$ = $;
         Pace.start({
@@ -26,10 +29,10 @@ requirejs(['jquery', 'main', 'server', 'pace'],
             sessionStorage.setItem('map.mainConfig', JSON.stringify(res.data));
             var mapType = getParamValue('mapType');
             if (mapType == null) {
-                $('#main').attr('src', 'mapw/map2D.html');
+                $('#main').attr('src', 'mapw/map.html');
             }
             else {
-                $('#main').attr('src', 'mapw/map2D.html?mapType=' + mapType);
+                $('#main').attr('src', 'mapw/map.html?mapType=' + mapType);
             }
         });
     });

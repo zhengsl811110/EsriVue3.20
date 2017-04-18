@@ -5,8 +5,8 @@ window.onload= function () {
     require([
         'gRegisterPubM',
         'jquery',
-        'server'
-    ], function (gRegisterPub, $, Server) {
+        'common'
+    ], function (gRegisterPub, $) {
         window.$ = $;
         gRegisterPub.initWidgets().initMapApi().initJsApi();
         ////初始化登入查询
