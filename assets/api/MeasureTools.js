@@ -45,26 +45,30 @@ define('MeasureTools', [
         _mapOverFlag:null,
         constructor: function (options) {
             declare.safeMixin(this.defaults, options);
-            //this._measureLayer = new GraphicsLayer({id: "measureLayer"});
-            //this.defaults.map.addLayer(this._measureLayer);
-            this._measureLayer = this.defaults.map.graphics;
+            this._measureLayer = new GraphicsLayer({id: "measureLayer"});
+            this.defaults.map.addLayer(this._measureLayer);
+            //this._measureLayer = this.defaults.map.graphics;
             this._initalToolbar();
             this._initialMeasureLayer();
         },
 
         //初始化测量图层事件
         _initialMeasureLayer: function () {
-            this._mapOverFlag = this._measureLayer.on('mouse-over', lang.hitch(this, function (evt) {
+            this._measureLayer.on("mouse-over", lang.hitch(this, function (evt) {
                 var graphic = evt.graphic;
                 if (graphic.symbol.isClearBtn) {
-                    this.defaults.map.setMapCursor('pointer');
-                    on.once(graphic.getShape(), 'click', lang.hitch(this, function () {
+                    this.defaults.map.setMapCursor("pointer");
+                    on.once(graphic.getShape(), "click", lang.hitch(this, function () {
                         this._measureLayer.clear();
-                        this._mapOverFlag.remove();
-                        this.defaults.map.setMapCursor('default');
+                        this.defaults.map.setMapCursor("default");
                     }));
                 }
             }));
+
+            this._measureLayer.on("mouse-out", lang.hitch(this, function (evt) {
+                this.defaults.map.setMapCursor("default");
+            }));
+
         },
 
         //初始化绘制工具条
@@ -177,7 +181,7 @@ define('MeasureTools', [
             this._measureLayer.add(textGraphic);
             this._measureLayer.add(clearBtn);
             ploygonGraphic.getDojoShape().moveToBack();
-            clearBtn.getDojoShape().moveToFront();
+            //clearBtn.getDojoShape().moveToFront();
         },
         //计算面积
         _calArea: function (polygon) {
