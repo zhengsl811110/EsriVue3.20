@@ -1,7 +1,7 @@
 /**
  * Created by zhengsl on 2017/3/21.
  */
-require(['vue'], function (Vue) {
+define(['vue'], function (Vue) {
     Vue.component('v-mapview', {
         props: {
             id: String,

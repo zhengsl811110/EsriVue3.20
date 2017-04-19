@@ -416,7 +416,7 @@ define(function () {
             var map = args.map;
             map.graphics.on('click', function (evt) {
                 var attributes = evt.graphic.attributes;
-                if (attributes.popup == true) {
+                if (attributes && attributes.popup == true) {
                     pubSub.publish('popup.showInfoPopup', {
                         map: map,
                         centerPt: attributes.centerPt,

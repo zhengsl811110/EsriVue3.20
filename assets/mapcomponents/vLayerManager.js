@@ -1,7 +1,7 @@
 /**
  * Created by zhengsl on 2017/3/23.
  */
-require(['vue'], function (Vue) {
+define(['vue'], function (Vue) {
     var list = [];//全局变量,处理图层相关问题
     window.iList = iList = [];
     Vue.component('tree-item', {

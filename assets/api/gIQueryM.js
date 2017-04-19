@@ -5,8 +5,8 @@ define(function () {
     var mapIQuery = null, iServiceUrl =window.OneMap.services.findByName('iQueryServiceKey').serviceUrl;
     return {
         start: function (map) {
-            map.setMapCursor('help');
             if (window.iList && window.iList.length > 0) {
+                map.setMapCursor('help');
                 if (mapIQuery != null)
                     mapIQuery.remove();
                 if (iServiceUrl == null)return false;
