@@ -1,7 +1,7 @@
 /**
  * Created by zhengsl on 2017/3/22.
  */
-define(['vue'], function (Vue) {
+define(['js/vue'], function (Vue) {
     Vue.component('v-basemap', {
         props: {
             map: Object,

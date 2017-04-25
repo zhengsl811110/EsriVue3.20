@@ -1,7 +1,7 @@
 /**
  * Created by zhengsl on 2017/3/23.
  */
-define(['vue'], function (Vue) {
+define(['js/vue'], function (Vue) {
     var list = [];//全局变量,处理图层相关问题
     window.iList = iList = [];
     Vue.component('tree-item', {
@@ -48,7 +48,8 @@ define(['vue'], function (Vue) {
                     list.push(tree.id);
                     if (tree.imgSrc)
                         iList.push(tree.id);
-                    pubSub.publish('legendView', {url: tree.legendSrc})
+                    if (tree.legendSrc)
+                        pubSub.publish('legendView', {url: tree.legendSrc})
                 }
                 this.check = !this.check;
             },

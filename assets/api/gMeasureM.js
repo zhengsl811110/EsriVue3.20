@@ -4,7 +4,7 @@
 define(function () {
     var measureMent=null;
     function measure(map,type) {
-        require(['MeasureTools', 'dojo/dom'], function (MeasureTools) {
+        require(['apiext/MeasureTools', 'dojo/dom'], function (MeasureTools) {
             if (measureMent == null) {
                 measureMent = new MeasureTools({
                     map: map

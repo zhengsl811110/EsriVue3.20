@@ -1,7 +1,7 @@
 /**
  * Created by zhengsl on 2017/4/7.
  */
-define(['vue', 'server'], function (Vue, Server) {
+define(['js/vue', 'js/server'], function (Vue, Server) {
     Vue.component('v-quicksearchview', {
         props: {
             map: Object,

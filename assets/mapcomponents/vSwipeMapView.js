@@ -1,7 +1,7 @@
 /**
  * Created by zhengsl on 2017/4/12.
  */
-define(['vue', 'server', 'gTokenM', 'vMapView', 'vLayerManager'], function (Vue, Server, gTokenM) {
+define(['js/vue', 'js/server', 'api/gTokenM', 'mapcomponents/vMapView', 'mapcomponents/vLayerManager'], function (Vue, Server, gTokenM) {
     function init() {
         //add mapW node
         domConstruct.create('div').id('mapW').addToBody();

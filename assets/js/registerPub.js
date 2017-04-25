@@ -4,11 +4,16 @@
 define(function () {
     function initWidgets() {
         pubSub.subscribe('mapView', function () {
-            require(['vue', 'server', 'gTokenM', 'vMapView'], function (Vue, Server, gTokenM) {
+            var mapView = window.OneMap.modules.findByName('mapView');
+            if (mapView == null) {
+                alert('请配置mapView模块');
+                return false;
+            }
+            require(['js/vue', 'js/server', 'api/gTokenM', 'mapcomponents/vMapView'], function (Vue, Server, gTokenM) {
                 //add mapW node
                 domConstruct.create('div').id('mapW').addToBody();
                 //render map node
-                Server.getAjax({url: window.OneMap.modules.findByName('mapView').serviceUrl}).done(function (res) {
+                Server.getAjax({url: mapView.serviceUrl}).done(function (res) {
                     gTokenM.setTokens(res.data.token);
                     new Vue({
                         el: '#mapW',
@@ -21,19 +26,16 @@ define(function () {
                         template: '<v-mapview :id="id" :spatialReference="spatialReference"  :extent="extent" @initComplete="initComplete"></v-mapview>',
                         methods: {
                             initComplete: function (map) {
-                                pubSub.publish('baseMapBarsView', {map: map, config: this.baseMap});
-
-                                //window.OneMap.modules.forEach(function (m) {
-                                //    pubSub.publish(m.name + 'View', {map: map});
-                                //});
-                                pubSub.publish('toolsBarView', {map: map});
-                                pubSub.publish('quickSearchView', {map: map});
+                                window.OneMap.map = map;
+                                //根据配置文件进行模块化加载
+                                pubSub.publish('baseMapBarsView', {map: map, config: this.baseMap});//地图显示依赖baseMapBars，不做权限控制
+                                var widgets = ['toolsBar', 'quickSearch', 'copyRight'];
+                                widgets.forEach(function (w) {
+                                    var module = window.OneMap.modules.findByName(w);
+                                    if (module != null)
+                                        pubSub.publish(w + 'View', {map: map, config: module});
+                                });
                                 map.on('load', function () {
-                                    //window.OneMap.modules.forEach(function (m) {
-                                    //    pubSub.publish(m.name + 'View', {map: map});
-                                    //});
-                                    //pubSub.publish('toolsBarView', {map: map});
-                                    //pubSub.publish('quickSearchView', {map: map});
                                     pubSub.publish('map.onLoad', {map: map});
                                 });
                             }
@@ -41,9 +43,9 @@ define(function () {
                     });
                 });
             });
-        });
+        });//2D地图视图
         pubSub.subscribe('mapView3D', function () {
-            require(['vue', 'server', 'gTokenM', 'vMapView'], function (Vue, Server, gTokenM) {
+            require(['js/vue', 'js/server', 'js/gTokenM', 'mapcomponents/vMapView'], function (Vue, Server, gTokenM) {
                 //add mapW node
                 domConstruct.create('div').id('mapW').addToBody();
                 //render map node
@@ -60,6 +62,7 @@ define(function () {
                         template: '<v-mapview :id="id" :spatialReference="spatialReference"  :extent="extent" @initComplete="initComplete"></v-mapview>',
                         methods: {
                             initComplete: function (map) {
+                                window.OneMap.map = map;
                                 pubSub.publish('baseMapBarsView', {map: map, config: this.baseMap});
 
                                 //window.OneMap.modules.forEach(function (m) {
@@ -80,20 +83,20 @@ define(function () {
                     });
                 });
             });
-        });
+        });//3D地图视图
         pubSub.subscribe('swipeMapView', function () {
-            require(['vSwipeMapView'], function (vSwipeMapView) {
+            require(['mapcomponents/vSwipeMapView'], function (vSwipeMapView) {
                 vSwipeMapView.init();
             });
-        });
+        });//拉框对比
         pubSub.subscribe('cmpMapView', function () {
-            require(['vCmpMapView'], function (vCmpMapView) {
+            require(['mapcomponents/vCmpMapView'], function (vCmpMapView) {
                 vCmpMapView.init();
             });
-        });
+        });//双窗口对比
         pubSub.subscribe('baseMapBarsView', function (args) {
             var map = args.map, config = args.config || [];
-            require(['vue', 'vBaseMap'], function (Vue) {
+            require(['js/vue', 'mapcomponents/vBaseMap'], function (Vue) {
                 //add mapW node
                 domConstruct.create('div').id('baseMapW').addToBody();
                 //render map node
@@ -117,10 +120,10 @@ define(function () {
                 });
                 //view.ui.add(baseMapW.$el, "top-right");
             });
-        });
+        });//地图baseMap
         pubSub.subscribe('toolsBarView', function (args) {
             var map = args.map, config = args.config || null;
-            require(['vue', 'server', 'vToolsBar'], function (Vue, Server) {
+            require(['js/vue', 'js/server', 'mapcomponents/vToolsBar'], function (Vue, Server) {
                 //add mapW node
                 domConstruct.create('div').id('toolsBarW').addToBody();
                 Server.getAjax({url: window.OneMap.modules.findByName('toolsBar').serviceUrl}).done(function (res) {
@@ -136,14 +139,14 @@ define(function () {
                     //view.ui.add(toolsBarW.$el, "top-left");
                 });
             });
-        });
+        });//地图工具条
         pubSub.subscribe('layerMangerView', function (args) {
             var map = args.map, config = args.config || null;
             if (window.layerManagerW != null) {
                 window.layerManagerW.visible = !window.layerManagerW.visible;
                 return false;
             }
-            require(['vue', 'server', 'vLayerManager'], function (Vue, Server) {
+            require(['js/vue', 'js/server', 'mapcomponents/vLayerManager'], function (Vue, Server) {
                 domConstruct.create('div').id('layerManagerW').addToBody();
                 Server.getAjax({url: window.OneMap.modules.findByName('mapLayer').serviceUrl}).done(function (res) {
                     //render map node
@@ -158,28 +161,29 @@ define(function () {
                     });
                 });
             });
-        });
+        });//图层管理起
         pubSub.subscribe('legendView', function (args) {
-            //var url = args.url;
-            //if (window.legendView != null) {
-            //    window.legendView.url = url;
-            //    return false;
-            //}
-            //require(['vue', 'vLegendView'], function (Vue) {
-            //    domConstruct.create('div').id('legendView').addToBody();
-            //    window.legendView = new Vue({
-            //        el: '#legendView',
-            //        data: {
-            //            url: url,
-            //            visible: false
-            //        },
-            //        template: '<v-legendview class="my-left-bottom"  :url="url"></v-quicksearchview>'
-            //    });
-            //});
-        });
+            var map = args.map,
+                url = args.url;
+            if (window.legendView != null) {
+                window.legendView.url = url;
+                return false;
+            }
+            require(['js/vue', 'mapcomponents/vLegendView'], function (Vue) {
+                domConstruct.create('div').id('legendView').addToBody();
+                window.legendView = new Vue({
+                    el: '#legendView',
+                    data: {
+                        url: url,
+                        visible: false
+                    },
+                    template: '<v-legendview class="my-left-bottom"  :url="url"></v-quicksearchview>'
+                });
+            });
+        });//图列
         pubSub.subscribe('quickSearchView', function (args) {
             var map = args.map;
-            require(['vue', 'server', 'vQuickSearchView'], function (Vue, Server) {
+            require(['js/vue', 'js/server', 'mapcomponents/vQuickSearchView'], function (Vue, Server) {
                 domConstruct.create('div').id('quickSearchW').addToBody();
                 Server.getAjax({url: window.OneMap.modules.findByName('quickSearch').serviceUrl}).done(function (res) {
                     new Vue({
@@ -193,7 +197,7 @@ define(function () {
                     //view.ui.add(layerManagerW.$el, "top-right");
                 });
             });
-        });
+        });//快速查询
         pubSub.subscribe('resultView', function (args) {
             var map = args.map,
                 res = args.res || [],
@@ -201,7 +205,7 @@ define(function () {
                 quickSearchStatus = window.OneMap.modules.findByName("quickSearch") != null;
             if (!window.resultView) {
                 domConstruct.create('div').id('resultView').addToBody();
-                require(['vue', 'vResultView'], function (Vue) {
+                require(['js/vue', 'mapcomponents/vResultView'], function (Vue) {
                     window.resultView = new Vue({
                         el: '#resultView',
                         data: {
@@ -224,7 +228,7 @@ define(function () {
                 window.resultView.allList = res;
                 if (window.resultView.visible == false)window.resultView.visible = true;
             }
-        });
+        });//查询结构浮动窗
         pubSub.subscribe('rightPanelView', function (args) {
             var map = args.map,
                 e = args.e,
@@ -232,7 +236,7 @@ define(function () {
             var x = (e.clientX - 14) + 'px', y = (e.clientY + 4) + 'px';
             if (!window.rightPanelView) {
                 domConstruct.create('div').id('rightPanelView').addToBody();
-                require(['vue', 'vRightPanelView'], function (Vue) {
+                require(['js/vue', 'mapcomponents/vRightPanelView'], function (Vue) {
                     window.rightPanelView = new Vue({
                         el: '#rightPanelView',
                         data: {
@@ -257,43 +261,72 @@ define(function () {
                 window.rightPanelView.y = y;
                 window.rightPanelView.visible = true;
             }
+        });//右击弹出框
+        pubSub.subscribe('copyRightView', function (args) {
+            var map = args.map, config = args.config || null;
+            require(['js/vue', 'mapcomponents/vCopyRightView'], function (Vue, Server) {
+                //add mapW node
+                domConstruct.create('div').id('copyRightW').addToBody();
+                new Vue({
+                    el: '#copyRightW',
+                    data: {
+                        label: config.config
+                    },
+                    template: '<v-copyright class="my-right-bottom" :label="label"></v-copyright>'
+                });
+            });
         });
         return this;
     }
 
     function initMapApi() {
+        //地图操作模块处理
         pubSub.subscribe('layerM.baseMapLayerM', function (args) {
             var map = args.map, layer = args.layer;
-            require(['gLayerM'], function (layerM) {
+            require(['api/gLayerM'], function (layerM) {
                 layerM.addBaseMap(map, layer);
             });
-        });
+        });//基础地图切换（互斥）
         pubSub.subscribe('layerM.add', function (args) {
             var map = args.map, layer = args.layer;
-            require(['gLayerM'], function (layerM) {
+            require(['api/gLayerM'], function (layerM) {
                 layerM.addLayer(map, layer);
             });
-        });
+        });//图层管理器（添加）
         pubSub.subscribe('layerM.close', function (args) {
             var map = args.map, layer = args.layer;
-            require(['gLayerM'], function (layerM) {
+            require(['api/gLayerM'], function (layerM) {
                 layerM.closeLayer(map, layer.id);
             });
-        });
+        });//图层管理器（关闭）
         pubSub.subscribe('toolsEvent', function (args) {
             var map = args.map, tool = args.tool;
-            require(['gToolsM'], function (toolsM) {
+            require(['api/gToolsM'], function (toolsM) {
                 toolsM[tool.toolKey].call(this, map)
             });
-        });
-
-        return this;
-    }
-
-    function initJsApi() {
+        });//地图工具条
+        pubSub.subscribe('map.onLoad', function (args) {
+            var map = args.map;
+            map.graphics.on('click', function (evt) {
+                var attributes = evt.graphic.attributes;
+                if (attributes && attributes.popup == true) {
+                    pubSub.publish('popup.showInfoPopup', {
+                        map: map,
+                        centerPt: attributes.centerPt,
+                        res: attributes.attr
+                    });
+                }
+            });
+        });//地图初始化
+        pubSub.subscribe('map.clear', function (args) {
+            var map = args.map;
+            require(['api/gToolsM'], function (gToolsM) {
+                gToolsM.clear(map);
+            });
+        });//地图情况
         pubSub.subscribe('popup.showInfoPopup', function (args) {
             var map = args.map, mapPoint = args.centerPt, res = args.res, pan = args.pan || false;
-            require(['gPopupM'], function (gPopupM) {
+            require(['api/gPopupM'], function (gPopupM) {
                 gPopupM.showInfoPopup({
                     map: map,
                     centerPt: mapPoint,
@@ -301,7 +334,7 @@ define(function () {
                     pan: pan
                 });
             });
-        });
+        });//弹出气泡
         pubSub.subscribe('draw.markerList', function (args) {
             var map = args.map,
                 res = args.res,
@@ -310,9 +343,9 @@ define(function () {
                 extent = args.extent || false,
                 popup = args.popup || false;
             var pts = [];
-            require(['esri/graphic', 'gWKTToGeometry', 'gSymbolM'], function (Graphic, gWKTToGeometry, gSymbolM) {
+            require(['esri/graphic', 'apiext/WKTToGeometry', 'api/gSymbolM'], function (Graphic, WKTToGeometry, gSymbolM) {
                 res.forEach(function (item, index) {
-                    gWKTToGeometry.parse({
+                    WKTToGeometry.parse({
                         wkt: item.shape,
                         spatialReference: map.spatialReference
                     }).done(function (geometry) {
@@ -362,16 +395,16 @@ define(function () {
                     }
                 });
             });
-        });
+        });//绘制小气泡列表
         pubSub.subscribe('draw.polygonList', function (args) {
             var map = args.map,
                 res = args.res,
                 extent = args.extent || false,
                 popup = args.popup || false;
             var pts = [];
-            require(['esri/graphic', 'gWKTToGeometry', 'gSymbolM'], function (Graphic, gWKTToGeometry, gSymbolM) {
+            require(['esri/graphic', 'apiext/WKTToGeometry', 'api/gSymbolM'], function (Graphic, WKTToGeometry, gSymbolM) {
                 res.forEach(function (item, index) {
-                    gWKTToGeometry.parse({
+                    WKTToGeometry.parse({
                         wkt: item.shape,
                         spatialReference: map.spatialReference
                     }).done(function (geometry) {
@@ -405,26 +438,84 @@ define(function () {
                     }
                 });
             });
-        });
-        pubSub.subscribe('map.clear', function (args) {
-            var map = args.map;
-            require(['gToolsM'], function (gToolsM) {
-                gToolsM.clear(map);
-            });
-        });
-        pubSub.subscribe('map.onLoad', function (args) {
-            var map = args.map;
-            map.graphics.on('click', function (evt) {
-                var attributes = evt.graphic.attributes;
-                if (attributes && attributes.popup == true) {
-                    pubSub.publish('popup.showInfoPopup', {
-                        map: map,
-                        centerPt: attributes.centerPt,
-                        res: attributes.attr
-                    });
+        });//汇总面状列表
+        //专题部分
+        pubSub.subscribe('map.heatMapLayer', function (args) {
+            require(['apiext/heatmap/HeatmapLayer', 'api/gGeometryM', 'js/server', 'apiext/heatmap/heatMap'], function (HeatMapLayer, gGeometryM, Server) {
+                var map = window.OneMap.map;
+                var heatMapLayer = map.getLayer('heatMapLayer') || null;
+                if (heatMapLayer == null) {
+                    domConstruct.create('div').id('heatMapLayer').addToBody();
+                    heatMapLayer = new HeatMapLayer({map: map, opacity: 0.85, config: {radius: 30}}, 'heatMapLayer');
+                    map.addLayer(heatMapLayer);
+                    //移除Dom节点
+                    document.body.removeChild(document.getElementById('heatMapLayer'));
                 }
+                else
+                    heatMapLayer.setData([]);
+                //插入输入执行Render
+                Server.getAjax({
+                    url: window.OneMap.services.findByName('buildingDealingHeatMapServiceKey').serviceUrl,
+                    data: {sTime: '2016-01-01', eTime: '2016-03-01'}
+                }).done(function (res) {
+                    var data = [], size = res.data.length;
+                    res.data.forEach(function (d, index) {
+                        gGeometryM.fromWkt(map, d.shape).done(function (geometry) {
+                            //for (var i = 0; i < parseInt(d.name); i++) {
+                            data.push(
+                                {
+                                    attributes: {},
+                                    geometry: geometry
+                                });
+                            //}
+                            if (index + 1 === size)
+                                heatMapLayer.setData(data);
+                        });
+                    });
+                });
             });
-        });
+        });//生成热点图
+        pubSub.subscribe('map.clusterMapLayer', function (args) {
+            require(['apiext/HeatmapLayer', 'api/gGeometryM', 'js/server', 'apiext/heatMap'], function (HeatMapLayer, gGeometryM, Server) {
+
+                var map = window.OneMap.map;
+                var heatMapLayer = map.getLayer('heatMapLayer') || null;
+                if (heatMapLayer == null) {
+                    domConstruct.create('div').id('heatMapLayer').addToBody();
+                    heatMapLayer = new HeatMapLayer({map: map, opacity: 0.85, config: {radius: 30}}, 'heatMapLayer');
+                    map.addLayer(heatMapLayer);
+                    //移除Dom节点
+                    document.body.removeChild(document.getElementById('heatMapLayer'));
+                }
+                else
+                    heatMapLayer.setData([]);
+                //插入输入执行Render
+                Server.getAjax({
+                    url: window.OneMap.services.findByName('buildingDealingHeatMapServiceKey').serviceUrl,
+                    data: {sTime: '2016-01-01', eTime: '2016-03-01'}
+                }).done(function (res) {
+                    var data = [], size = res.data.length;
+                    res.data.forEach(function (d, index) {
+                        gGeometryM.fromWkt(map, d.shape).done(function (geometry) {
+                            //for (var i = 0; i < parseInt(d.name); i++) {
+                            data.push(
+                                {
+                                    attributes: {},
+                                    geometry: geometry
+                                });
+                            //}
+                            if (index + 1 === size)
+                                heatMapLayer.setData(data);
+                        });
+                    });
+                });
+            });
+        });//生成聚合图
+
+        return this;
+    }
+
+    function initJsApi() {
         return this;
     }
 

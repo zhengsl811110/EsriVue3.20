@@ -1,7 +1,7 @@
 /**
  * Created by zhengsl on 2017/3/27.
  */
-define(['vue'], function (Vue) {
+define(['js/vue'], function (Vue) {
     Vue.component('v-toolsbar', {
         props: {
             map: Object,

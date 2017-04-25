@@ -45,7 +45,7 @@ define(function () {
     }
 
     function addTileLayer(map,layer,layerIndex) {
-        require(['esri/layers/ArcGISTiledMapServiceLayer', 'gTokenM'], function (ArcGISTiledMapServiceLayer, gTokenM) {
+        require(['esri/layers/ArcGISTiledMapServiceLayer', 'api/gTokenM'], function (ArcGISTiledMapServiceLayer, gTokenM) {
             gTokenM.getToken(layer.tokenName).then(function (tokenStr) {
                 var token = '';
                 if (tokenStr != null) {//have token
@@ -67,7 +67,7 @@ define(function () {
     }
 
     function  addDynamicLayer(map,layer,layerIndex) {
-        require(['esri/layers/ArcGISDynamicMapServiceLayer', 'gTokenM'], function (ArcGISDynamicMapServiceLayer, gTokenM) {
+        require(['esri/layers/ArcGISDynamicMapServiceLayer', 'api/gTokenM'], function (ArcGISDynamicMapServiceLayer, gTokenM) {
             gTokenM.getToken(layer.tokenName).then(function (tokenStr) {
                 var token = '';
                 if (tokenStr != null) {//have token

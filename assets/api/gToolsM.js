@@ -59,17 +59,17 @@ define(function () {
             }
         },
         measureLength: function (map) {
-            require(['gMeasureM'], function (gMeasureM) {
+            require(['api/gMeasureM'], function (gMeasureM) {
                 gMeasureM.distance(map);
             });
         },
         measureArea: function (map) {
-            require(['gMeasureM'], function (gMeasureM) {
+            require(['api/gMeasureM'], function (gMeasureM) {
                 gMeasureM.area(map);
             });
         },
         iQueryTool: function (map) {
-            require(['gIQueryM'], function (gIQueryM) {
+            require(['api/gIQueryM'], function (gIQueryM) {
                 gIQueryM.start(map);
             });
         },
@@ -83,11 +83,15 @@ define(function () {
             map.setMapCursor('default');
             map.graphics.clear();
             map.infoWindow.hide();
-            require(['gIQueryM'], function (gIQueryM) {
+            require(['api/gIQueryM'], function (gIQueryM) {
                 gIQueryM.close(map);
             });
             if (window.resultView)
                 window.resultView.visible = false;//查询结果面板
+            //清空热力图
+            var heatMapLayer = map.getLayer('heatMapLayer') || null;
+            if (heatMapLayer != null)
+                heatMapLayer.setData([]);
         }
     };
 });

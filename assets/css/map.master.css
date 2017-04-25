@@ -225,6 +225,11 @@ ul,li {
     outline: medium;
     cursor: pointer;
 }
+
+.v-copyRight {
+    background: none;
+    box-shadow: none;
+}
 .v-popup-content {
     min-height: 100px;
     max-height: 260px;
@@ -497,7 +502,7 @@ span.icon {
     background-position: 0 -150px;
 }
 .icon.expand.active {
-    background-position: -30px -120px;
+    background-position: -30px -150px;
 }
 .icon.expand.active:hover {
     background-position: -30px -150px;

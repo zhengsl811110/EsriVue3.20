@@ -1,7 +1,7 @@
 /**
  * Created by zhengsl on 2017/4/7.
  */
-define(['vue'], function (Vue) {
+define(['js/vue'], function (Vue) {
     Vue.component('v-legendview', {
         props: {
             url: String

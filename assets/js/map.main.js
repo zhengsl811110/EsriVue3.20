@@ -2,13 +2,21 @@
  * Created by zhengsl on 2017/3/21.
  */
 window.onload= function () {
+    /**初始化属性配置**/
+    window.OneMap = {
+        map: null,
+        modules: null,
+        services: null,
+        hostIp: '192.168.42.75'
+    };
+
     require([
-        'gRegisterPubM',
         'jquery',
-        'common'
-    ], function (gRegisterPub, $) {
+        'js/registerPub',
+        'js/common'
+    ], function ($, registerPub) {
         window.$ = $;
-        gRegisterPub.initWidgets().initMapApi().initJsApi();
+        registerPub.initWidgets().initMapApi().initJsApi();
         ////初始化登入查询
         //Server.getAjax({
         //    url: 'http://192.168.84.23/jsDataCenter/m.ashx?x=login&appid=szsghj',

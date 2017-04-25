@@ -1,7 +1,7 @@
 /**
  * Created by zhengsl on 2017/4/7.
  */
-define(['vue', 'laypage'], function (Vue, laypage) {
+define(['js/vue', 'js/laypage/laypage'], function (Vue, laypage) {
     Vue.component('v-listitem', {
         props: {
             item: Object,

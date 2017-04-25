@@ -54,12 +54,6 @@ window.pubSub = pubSub = {};
     };
 } (pubSub));
 
-/**初始化属性配置**/
-window.OneMap= {
-    modules: null,
-    services: null,
-    hostIp: '192.168.42.75'
-};
 /*自定义方法，动态创建Dom添加到body中*/
 function createDom(){
     this.element=null;
