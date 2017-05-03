@@ -107,7 +107,8 @@ ul,li {
 .v-toolsBar:hover {
     opacity: 1;
 }
-.v-toolsBar >ul {
+
+.v-toolsBar ul {
     float: left;
     margin-top: 4px;
     background: #fff;
@@ -626,6 +627,19 @@ span.layerIcon {
 }
 .layerIcon.l-unCheck.active {
     background-position: -120px 0;
+}
+
+/**Vue transition**/
+.slide-enter-active {
+    transition: all .3s ease;
+}
+
+.slide-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-enter, .slide-enter-leave-active {
+    height: 0;
 }
 /**icon marker**/
 span.marker-Icon{background:url("../imgs/poi/icon-poi.png") no-repeat left;float: left;width: 30px;height: 30px;}

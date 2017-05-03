@@ -23,7 +23,7 @@ requirejs(['jquery', 'main', 'server', 'pace', 'common'],
         });
         Main.init();
         Server.getAjax({
-            url: 'http://192.168.84.23/jsDataCenter/m.ashx?x=login&appid=ghfzjc',
+            url: 'http://58.210.9.131/jsDataCenter/m.ashx?x=login&appid=ghfzjc',
             data: {xUserName: 'sip', xPassword: 'sip'}
             //url: 'http://192.168.42.75/jsDataCenter/m.ashx?x=login&appid=qzcyy',
             //data: {xUserName: 'zhengsl', xPassword: '123@abcd'}

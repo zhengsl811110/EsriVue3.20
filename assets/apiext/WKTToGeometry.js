@@ -123,8 +123,8 @@ define(function () {
                 var wktUtil = new WKTUtil();
                 var pt = wktUtil.read(options.wkt);
                 var json = {
-                    x: pt[0],
-                    y: pt[1],
+                    x: parseFloat(pt[0]),
+                    y: parseFloat(pt[1]),
                     spatialReference: options.spatialReference
                 };
 

@@ -77,6 +77,7 @@ createDom.prototype= {
     },
     addToBody: function () {
         document.body.appendChild(this.element);
+        return this.element;
     }
 };
 window.domConstruct=new createDom();

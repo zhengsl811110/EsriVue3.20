@@ -24,7 +24,7 @@ define([
             useLocalMaximum: false,
             map: null,
             config: {
-                radius: 40,
+                radius: 12,
                 debug: false,
                 visible: true,
                 gradient: {
@@ -35,7 +35,7 @@ define([
                     1.00: "rgb(255,0,0)"
                 }
             },
-            opacity: 0.85
+            opacity: 0.5
         },
         // constructor
         constructor: function (options, srcNode) {

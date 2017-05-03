@@ -14,8 +14,8 @@ define(['js/vue'], function (Vue) {
                 toolKey: ''
             }
         },
-        template: '<div class="esri-widget v-toolsBar"><span class="icon expand" :class="{active:active}" @click="expand"></span>' +
-        '<template v-for="toolBar in toolsBarList"><ul v-if="!active"><li v-for="tool in toolBar.children" @click="toolEvent(tool)"><span class="icon" :class="[tool.icon || tool.toolKey,{active:tool.toolKey==toolKey}]" :title="tool.name"></span></li></ul></template>' +
+        template: '<div class="esri-widget v-toolsBar"><span class="icon expand"   :class="{active:active}" @click="expand"></span>' +
+        '<transition name="expand"><div v-show="!active"><template v-for="toolBar in toolsBarList"><ul><li v-for="tool in toolBar.children" @click="toolEvent(tool)"><span class="icon" :class="[tool.icon || tool.toolKey,{active:tool.toolKey==toolKey}]" :title="tool.name"></span></li></ul></template></div></transition>' +
         '</div>',
         mounted: function () {
 

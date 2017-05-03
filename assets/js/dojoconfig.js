@@ -29,6 +29,10 @@ window.dojoConfig = {
             location: getRelUrl() + "/plugins"
         },
         {
+            name: "zrender",
+            location: getRelUrl() + "/js/"
+        },
+        {
             name: "components",
             location: getRelUrl() + "/components"
         },

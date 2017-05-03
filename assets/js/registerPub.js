@@ -439,6 +439,10 @@ define(function () {
                 });
             });
         });//汇总面状列表
+        return this;
+    }
+
+    function initJsApi() {
         //专题部分
         pubSub.subscribe('map.heatMapLayer', function (args) {
             require(['apiext/heatmap/HeatmapLayer', 'api/gGeometryM', 'js/server', 'apiext/heatmap/heatMap'], function (HeatMapLayer, gGeometryM, Server) {
@@ -446,7 +450,7 @@ define(function () {
                 var heatMapLayer = map.getLayer('heatMapLayer') || null;
                 if (heatMapLayer == null) {
                     domConstruct.create('div').id('heatMapLayer').addToBody();
-                    heatMapLayer = new HeatMapLayer({map: map, opacity: 0.85, config: {radius: 30}}, 'heatMapLayer');
+                    heatMapLayer = new HeatMapLayer({map: map, opacity: 0.8, config: {radius: 12}}, 'heatMapLayer');
                     map.addLayer(heatMapLayer);
                     //移除Dom节点
                     document.body.removeChild(document.getElementById('heatMapLayer'));
@@ -476,20 +480,8 @@ define(function () {
             });
         });//生成热点图
         pubSub.subscribe('map.clusterMapLayer', function (args) {
-            require(['apiext/HeatmapLayer', 'api/gGeometryM', 'js/server', 'apiext/heatMap'], function (HeatMapLayer, gGeometryM, Server) {
-
+            require(['apiext/clustermap/ClusterMapLayer', 'js/server', 'api/gGeometryM'], function (ClusterMapLayer, Server, gGeometryM) {
                 var map = window.OneMap.map;
-                var heatMapLayer = map.getLayer('heatMapLayer') || null;
-                if (heatMapLayer == null) {
-                    domConstruct.create('div').id('heatMapLayer').addToBody();
-                    heatMapLayer = new HeatMapLayer({map: map, opacity: 0.85, config: {radius: 30}}, 'heatMapLayer');
-                    map.addLayer(heatMapLayer);
-                    //移除Dom节点
-                    document.body.removeChild(document.getElementById('heatMapLayer'));
-                }
-                else
-                    heatMapLayer.setData([]);
-                //插入输入执行Render
                 Server.getAjax({
                     url: window.OneMap.services.findByName('buildingDealingHeatMapServiceKey').serviceUrl,
                     data: {sTime: '2016-01-01', eTime: '2016-03-01'}
@@ -497,25 +489,26 @@ define(function () {
                     var data = [], size = res.data.length;
                     res.data.forEach(function (d, index) {
                         gGeometryM.fromWkt(map, d.shape).done(function (geometry) {
-                            //for (var i = 0; i < parseInt(d.name); i++) {
-                            data.push(
-                                {
-                                    attributes: {},
-                                    geometry: geometry
-                                });
-                            //}
+                            data.push({
+                                popupInfo: d,
+                                attributes: {count: parseInt(d.name)},
+                                x: geometry.x,
+                                y: geometry.y
+                            });
                             if (index + 1 === size)
-                                heatMapLayer.setData(data);
+                                ClusterMapLayer.addClusters(map, data);
                         });
                     });
                 });
             });
         });//生成聚合图
-
-        return this;
-    }
-
-    function initJsApi() {
+        pubSub.subscribe('map.canvasLayer', function (args) {
+            require(['apiext/CanvasLayerByZRender'], function (CanvasLayerByZRender) {
+                var map = window.OneMap.map;
+                var canvasLayer = new CanvasLayerByZRender(map, {id: 'canvasLayer'});
+                canvasLayer.setData();
+            });
+        });
         return this;
     }
 
