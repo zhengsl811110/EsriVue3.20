@@ -40,6 +40,14 @@ define(['apiext/WKTToGeometry'], function (WKTToGeometry) {
                 defer.resolve(geometry);
             });
             return defer;
+        },
+        fromWktToScreenPoint: function (map, WKT) {
+            var defer = $.Deferred();
+            this.fromWkt(map, WKT).done(function (g) {
+                var screenPoint = map.toScreen(g);
+                defer.resolve({op: g, sp: screenPoint});
+            });
+            return defer;
         }
     }
 });

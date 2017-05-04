@@ -37,6 +37,23 @@ define(['js/vue'], function (Vue) {
                     smartNavigation: false,
                     force3DTransforms: true
                 });
+                //扩展map属性
+                map.extLayer = [];
+                map.getExtLayer = function (layerId) {
+                    if (this.extLayer.length == 0)return null;
+                    var layer = null;
+                    this.extLayer.forEach(function (c) {
+                        if (c.id.toLowerCase() === layerId.toLowerCase()) {
+                            layer = c.layer;
+                            return false;
+                        }
+                    });
+                    return layer;
+                };
+                map.removeExtLayer = function (layer) {
+                    if (layer)
+                        layer.clean();
+                };
                 _this.$emit('initComplete', map);
             });
         }

@@ -32,9 +32,8 @@ define([
             this._div.id = this.id + '_layer';
             domStyle.set(this._div, {
                 position: "absolute",
-                left: "0",
-                top: '0',
-                transform: 'translate3d(0,0,-1px)',
+                left: "0px",
+                top: '0px',
                 width: this._map.width + 'px',
                 height: this._map.height + 'px',
                 overflow: 'visible',
@@ -45,6 +44,7 @@ define([
                 this._eventHandler.push(dojo.connect(this._map, 'onZoomStart', this, this._zoomStartHandler));
                 this._eventHandler.push(dojo.connect(this._map, 'onZoomEnd', this, this._zoomEndHandler));
                 this._eventHandler.push(dojo.connect(this._map, 'onPan', this, this._panHandler));
+                this._eventHandler.push(dojo.connect(this._map, 'onPanStart', this, this._panStartHandler));
                 this._eventHandler.push(dojo.connect(this._map, 'onPanEnd', this, this._panEndHandler));
             }
 
@@ -75,35 +75,20 @@ define([
             });
         },
         _zoomEndHandler: function () {
-            domStyle.set(this._div, {
-                top: 0,
-                left: 0,
-                display: 'block',
-                transform: 'translate3d(0,0,-1px)'
-            });
-            this._geoCoord2Pixel(this._points);//坐标转换并存储
-            this._drawGraphic();
+            this._refresh();
         },
         _panHandler: function (extent, delta) {
-            var rect = this._map.__visibleRect,
-                x = rect.x + delta.x,
-                y = rect.y + delta.y;
-
-            this._panDx = x;
-            this._panDy = y;
             domStyle.set(this._div, {
-                transform: 'translate3d(' + x + 'px, ' + y + 'px,-1px)'
+                top: (this.dy + delta.y) + 'px',
+                left: (this.dx + delta.x) + 'px'
             });
         },
+        _panStartHandler: function (extent, delta) {
+            this.dx = domStyle.get(this._div, 'left');
+            this.dy = domStyle.get(this._div, 'top');
+        },
         _panEndHandler: function () {
-            var rect = this._map.__visibleRect,
-                x = rect.x,
-                y = rect.y;
-            this._panDx = x;
-            this._panDy = y;
-            domStyle.set(this._div, {
-                transform: 'translate3d(' + x + 'px, ' + y + 'px,-1px)'
-            });
+            this._refresh();
         },
         _resizeHandler: function () {
             domStyle.set(this._div, {
@@ -120,7 +105,6 @@ define([
             this._points = points = [[57235.644737956158, 42551.117602235208], [65744.661755990179, 47308.335450004241]];
             this._geoCoord2Pixel(points);//坐标转换并存储
             this._drawGraphic();
-
         },
         _drawGraphic: function () {
             var _this = this;
@@ -166,7 +150,13 @@ define([
             });
         },
         _refresh: function () {
-
+            domStyle.set(this._div, {
+                top: 0,
+                left: 0,
+                display: 'block'
+            });
+            this._geoCoord2Pixel(this._points);//坐标转换并存储
+            this._drawGraphic();
         }
     });
 });

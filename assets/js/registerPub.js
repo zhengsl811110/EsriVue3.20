@@ -503,10 +503,41 @@ define(function () {
             });
         });//生成聚合图
         pubSub.subscribe('map.canvasLayer', function (args) {
-            require(['apiext/CanvasLayerByZRender'], function (CanvasLayerByZRender) {
+            require(['apiext/canvaslayer/CanvasLayerByZRender', 'api/gGeometryM'], function (CanvasLayerByZRender, gGeometryM) {
                 var map = window.OneMap.map;
-                var canvasLayer = new CanvasLayerByZRender(map, {id: 'canvasLayer'});
-                canvasLayer.setData();
+                var canvasLayer = new CanvasLayerByZRender(map, {
+                    id: 'canvasLayer',
+                    minZoom: 4
+                });
+                var zr = canvasLayer._zr;
+                var geometry = [];
+                //应用
+                require(['zrender/graphic/Image'], function (ImageShape) {
+                    gGeometryM.fromWktToScreenPoint(map, 'POINT (63785.51572770963 45154.70972970091)').done(function (g) {
+                        var image = new ImageShape({
+                            style: {
+                                image: '../assets/imgs/23.png',
+                                x: g.sp.x - 9,
+                                y: g.sp.y - 9,
+                                width: 18,
+                                height: 18
+                            },
+                            op: g.op,
+                            hoverable: true,
+                            onmouseover: function (e) {
+                                zr.addHover(this, {
+                                    image: '../assets/imgs/27.png'
+                                });
+                                zr.refresh(e);
+                            },
+                            onmouseout: function () {
+                                zr.removeHover(this);
+                            }
+                        });
+                        geometry.push(image);
+                        canvasLayer.add(geometry);
+                    });
+                });
             });
         });
         return this;

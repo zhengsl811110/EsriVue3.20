@@ -459,6 +459,8 @@ ul,li {
     width: 310px !important;
 }
 .esriPopup .titleButton.maximize{visibility:hidden}
+
+/*.map .esriMapContainer .esriMapLayers{  position: absolute !important;}*/
     /**span.icon**/
 span.icon {
     float: left;
